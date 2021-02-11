@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Demo</title>
+  </head>
+  <body>
+    <form action="">
+      <input required type="file" name="image" accept=".png, .jpg" />
+      <button>Upload</button>
+
+      <div id="app"></div>
+    </form>
+    <script>
+      const form = document.querySelector("form");
+      const app = document.querySelector("#app");
+      form.onsubmit = (e) => {
+        e.preventDefault();
+        const formData = new FormData();
+        formData.append("image", form.elements[0].files[0]);
+        fetch("/process", { method: "POST", body: formData })
+          .then((res) => res.json())
+          .then((data) => {
+            app.insertAdjacentHTML(
+              "beforeend",
+              `<img src="${data.url}" alt="">`
+            );
+          })
+          .catch((err) => console.log(err));
+      };
+    </script>
+  </body>
+</html>
